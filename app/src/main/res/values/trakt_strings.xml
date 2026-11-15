@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Textes pour l'intégration Trakt -->
+    <string name="trakt_account_title">Compte Trakt</string>
+    <string name="trakt_login_desc">Associer votre compte Trakt pour la synchronisation</string>
+    <string name="trakt_success">Connexion réussie !</string>
+    <string name="trakt_error">Erreur lors de la communication avec Trakt.</string>
+    <string name="trakt_expired">Délai expiré ou échec de la connexion.</string>
+    <string name="trakt_waiting">En attente de votre validation sur le site…</string>
+    <string name="trakt_heading">Compte Trakt</string>
+    <string name="settings_trakt_title">Trakt.tv</string>
+    <string name="settings_trakt_description">Associer votre compte Trakt pour la synchronisation</string>
+    <string name="trakt_login_title">Connexion Trakt.tv</string>
+    <string name="trakt_loading">Chargement…</string>
+    <string name="trakt_assoc_button">Associer un compte Trakt</string>
+    <string name="trakt_step_1">1. Allez sur :</string>
+    <string name="trakt_step_2">2. Entrez le code :</string>
+    <string name="trakt_waiting_validation">En attente de votre validation sur le site…</string>
+    <string name="trakt_status_press">Appuyez sur le bouton pour associer votre compte Trakt</string>
+    <string name="trakt_status_generating">Génération du code…</string>
+    <string name="trakt_status_success">Connexion réussie !</string>
+    <string name="trakt_status_expired">Délai expiré ou échec de la connexion.</string>
+    <string name="trakt_status_error">Erreur lors de la communication avec Trakt.</string>
+    <string name="trakt_status_visit_format">Rendez-vous sur %s et entrez le code :</string>
+    <string name="trakt_account_linked">Votre compte Trakt est associé</string>
+    <string name="trakt_unlink_button">Dissocier le compte</string>
+</resources>
