@@ -30,7 +30,7 @@ class TraktManager private constructor(context: Context) {
                 append('T'); append('r'); append('a'); append('k'); append('t'); append(':'); append(' ')
                 append('S'); append('e'); append('t'); append(' '); append(value.toString())
             })
-            prefs.edit().putString("access_token", value).commit()
+            prefs.edit().putString("access_token", value).apply()
         }
 
     val isAuthenticated: Boolean
