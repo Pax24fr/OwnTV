@@ -41,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -459,7 +460,6 @@ fun HomeScreen(
                                         }
                                     },
                                     onLongClick = { item -> contextTrendingItem = item },
-                                    onMenuKey = { item -> contextTrendingItem = item },
                                     onFocus = onNonHeroFocused,
                                     firstItemFocusRequester = firstItemFocusRequester ?: trendingPrimaryFocus,
                                     track = track,
@@ -1321,7 +1321,6 @@ private fun TrendingPosterRow(
     start: Dp,
     onItemClick: (TrendingHomeItem) -> Unit,
     onLongClick: (TrendingHomeItem) -> Unit,
-    onMenuKey: (TrendingHomeItem) -> Unit,
     onFocus: () -> Unit,
     firstItemFocusRequester: FocusRequester?,
     track: (FocusRequester) -> Unit,
@@ -1338,6 +1337,8 @@ private fun TrendingPosterRow(
             modifier = Modifier.focusRestorer().focusGroup(),
         ) {
             itemsIndexed(items, key = { _, item -> item.stableKey }) { index, item ->
+                var downAt by remember { mutableLongStateOf(0L) }
+                var handled by remember { mutableStateOf(false) }
                 StagePoster(
                     title = when (item) {
                         is TrendingHomeItem.Movie -> item.movie.name
@@ -1352,9 +1353,31 @@ private fun TrendingPosterRow(
                         .then(if (index == 0 && firstItemFocusRequester != null) Modifier.focusRequester(firstItemFocusRequester) else Modifier)
                         .tracked(track = track)
                         .onPreviewKeyEvent { e ->
-                            if (e.type == KeyEventType.KeyDown && e.key == Key.Menu) {
-                                onMenuKey(item)
+                            val isOk = e.key == Key.DirectionCenter || e.key == Key.Enter || e.key == Key.NumPadEnter
+                            if (e.key == Key.Menu && e.type == KeyEventType.KeyDown) {
+                                onLongClick(item)
                                 true
+                            } else if (isOk) {
+                                when (e.type) {
+                                    KeyEventType.KeyDown -> {
+                                        val now = System.currentTimeMillis()
+                                        if (downAt == 0L) {
+                                            downAt = now
+                                            handled = false
+                                        } else if (!handled && now - downAt >= 350L) {
+                                            handled = true
+                                            onLongClick(item)
+                                        }
+                                        handled
+                                    }
+                                    KeyEventType.KeyUp -> {
+                                        downAt = 0L
+                                        val wasHandled = handled
+                                        handled = false
+                                        wasHandled
+                                    }
+                                    else -> false
+                                }
                             } else false
                         }
                         .onFocusChanged {
