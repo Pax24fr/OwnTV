@@ -3,12 +3,13 @@
 Ce document répertorie l'ensemble des modifications personnalisées apportées au code source d'OwnTV afin d'intégrer et de maintenir la synchronisation avec Trakt.tv. Il sert de guide de référence lors des mises à jour du dépôt original (upstream).
 
 ---
-- Ajout de Trakt (basique via menu marque comme vu + interception fin de visionnage)
-- Onglet Téléchargements : Passage de l'onglet Recordings en premier par défaut.
-- Encodage EPG (Caractères bizarres / ``) : Diagnostic et correction de l'analyseur XML
-- UX Télécommande (Bouton Back pour vider la recherche) : Implémenté sur le Live TV, les Films et les Séries.
-
 ## 📦 Fichiers modifiés et créés
+
+### 3. Améliorations Ergonomiques (QoL / UX TV)
+* **Onglet Téléchargements par défaut :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
+* **Encodage EPG :** Correction dans le module Core (`XmltvParser.kt` via `BufferedInputStream`) pour forcer la lecture UTF-8 des guides XMLTV (suppression des losanges de corruption ``).
+* **Bouton Back pour effacer la recherche :** Ajout d'un `BackHandler` sur les écrans Live TV, Films et Séries pour vider instantanément la recherche active au premier appui.
+* **Fermeture instantanée du Rail de Navigation :** Modification de `selectFromNav` dans `OwnTVShell.kt` pour que cliquer sur n'importe quel élément du menu sélectionne la section **et** focalise immédiatement le contenu (fermant le rail flottant sans exiger un clic supplémentaire vers la droite).
 
 ### 1. Configuration et Linter Gradle
 * **Fichiers :** `safe_literals.txt` & `TraktConfig.kt`
@@ -54,31 +55,3 @@ Lorsqu'une nouvelle version du code officiel est récupérée, vérifiez les poi
     * Si la mise à jour modifie `safe_literals.txt`, assurez-vous que la section Trakt est toujours présente et que les compteurs d'occurrences correspondent toujours au code.
 3. **Tester la compilation :**
     * Lancer `./gradlew verifyI18nLiterals` suivi d'un build complet pour valider l'absence de conflit Koin ou Gradle.
-
-## 🔄 GitHub
-* Dès que tu veux sauvegarder et envoyer ton travail sur ton GitHub, utilise tes commandes habituelles : 
-  ```
-  git add .
-  git commit -m "Un message qui explique ta modification"
-  git push origin feature/trakt-integration
-    ```
-
-* Mettre à jour ton main local avec les nouveautés officielles :
-  ```
-  git checkout main
-  git fetch upstream
-  git merge upstream/main
-  git push origin main
-  ```
-
-* Intégrer ces nouveautés dans ta branche de travail :
-  ```
-  git checkout feature/trakt-integration
-  git merge main
-  ```
-(Cette commande injecte le nouveau code du créateur directement dans ta branche Trakt. S'il y a un petit conflit sur un fichier que vous avez modifié tous les deux, Android Studio t'aidera à le régler).
-
-* Envoyer ta branche mise à jour sur ton GitHub :
-```
-git push origin feature/trakt-integration
-```

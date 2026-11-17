@@ -1120,6 +1120,11 @@ fun OwnTVShell(
                   restoreTrendingSearchFocus = false
               }
               onSelectSection(section)
+              scope.launch {
+                  withFrameNanos { }
+                  withFrameNanos { }
+                  runCatching { contentAreaFocus.requestFocus() }
+              }
           }
           // Audio Mode: the now-playing bar — in the top bar left of the weather chip, or in the Stage
           // cluster in the Continue pill's place. Present only while PlayerMode.AUDIO.
