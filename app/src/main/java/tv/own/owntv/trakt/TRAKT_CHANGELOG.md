@@ -5,12 +5,6 @@ Ce document répertorie l'ensemble des modifications personnalisées apportées 
 ---
 ## 📦 Fichiers modifiés et créés
 
-### 3. Améliorations Ergonomiques (QoL / UX TV)
-* **Onglet Téléchargements par défaut :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
-* **Encodage EPG :** Correction dans le module Core (`XmltvParser.kt` via `BufferedInputStream`) pour forcer la lecture UTF-8 des guides XMLTV (suppression des losanges de corruption ``).
-* **Bouton Back pour effacer la recherche :** Ajout d'un `BackHandler` sur les écrans Live TV, Films et Séries pour vider instantanément la recherche active au premier appui.
-* **Fermeture instantanée du Rail de Navigation :** Modification de `selectFromNav` dans `OwnTVShell.kt` pour que cliquer sur n'importe quel élément du menu sélectionne la section **et** focalise immédiatement le contenu (fermant le rail flottant sans exiger un clic supplémentaire vers la droite).
-
 ### 1. Configuration et Linter Gradle
 * **Fichiers :** `safe_literals.txt` & `TraktConfig.kt`
 * **Problème résolu :** Le linter interne Gradle (`verifyI18nLiterals`) bloque la compilation lorsque de nouvelles chaînes de caractères techniques non traduites sont introduites.
