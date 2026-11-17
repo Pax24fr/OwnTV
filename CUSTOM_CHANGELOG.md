@@ -4,10 +4,12 @@ Ce document répertorie l'ensemble des modifications personnalisées apportées 
 Il sert de guide de référence lors des mises à jour du dépôt original (upstream).
 
 ---
-## 📦 Fichiers modifiés et créés
 
+### 1. Ajout de Trakt.tv
 * **Ajout de Trakt** (basique via menu marque comme vu + interception fin de visionnage)
-* **Onglet Recordings** en premier par défaut dans Téléchargements.
-* **Encodage EPG** (Caractères bizarres / ``) : Diagnostic et correction de l'analyseur XML
-* **Bouton Back** pour vider la recherche : Implémenté sur les chaines Live TV, les titre de Films et les titres de Séries.
 
+### 2. Améliorations Ergonomiques (QoL / UX TV)
+* **Onglet Téléchargements :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
+* **Encodage EPG :** Correction dans le module Core (`XmltvParser.kt` via `BufferedInputStream`) pour forcer la lecture UTF-8 des guides XMLTV.
+* **Bouton Back pour effacer la recherche :** Ajout d'un `BackHandler` sur les chaines Live TV, les titres de Films et de Séries pour vider instantanément la recherche active au premier appui.
+* **Fermeture instantanée du Rail de Navigation :** Modification de `selectFromNav` dans `OwnTVShell.kt` pour que cliquer OK sur n'importe quel élément du menu sélectionne la section **et** focalise immédiatement sur le contenu sans exiger un clic supplémentaire vers la droite.
