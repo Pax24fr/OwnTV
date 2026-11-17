@@ -433,6 +433,14 @@ fun MoviesScreen(
 
     // Back closes the sheet: one level out, to the current title (or the list's way in when a lock emptied it).
     BackHandler(enabled = categoriesOpen) { categoriesOpen = false; focusListAfterSheet(scope, ::focusCurrentTitle, { gridPaneFocused }, ::focusTitles) }
+    BackHandler(enabled = searchQuery.isNotBlank()) {
+        vm.setSearchQuery(String())
+        scope.launch {
+            runCatching { if (usesList) effectiveListState.scrollToItem(0) else effectiveGridState.scrollToItem(0) }
+            withFrameNanos { }
+            runCatching { listSearchFocus.requestFocus() }
+        }
+    }
     LaunchedEffect(categoriesOpen) {
         if (categoriesOpen) { withFrameNanos { }; runCatching { railFocus.requestFocus() } }
         // However the sheet closed (Back, a pick, ◀ to the rail), the next one starts fresh.

@@ -530,6 +530,14 @@ fun LiveScreen(
     val listPin = rememberListPinFocus(channels.itemCount, firstItemFocus, { revealRow(0) }) { focusChannelList() }
     // Back closes the sheet: one level out, to the current row (or the list's way in when a lock emptied it).
     BackHandler(enabled = categoriesOpen) { categoriesOpen = false; focusListAfterSheet(scope, ::focusCurrentRow, { channelPaneFocused }, ::focusChannelList) }
+    BackHandler(enabled = searchQuery.isNotBlank()) {
+        vm.setSearchQuery(String())
+        scope.launch {
+            runCatching { effectiveListState.scrollToItem(0) }
+            withFrameNanos { }
+            runCatching { listSearchFocus.requestFocus() }
+        }
+    }
     // ◀ Categories, from a row, the search field or a locked category's Enter PIN: the sheet (Stage) or the column (Separate).
     fun openCategories() { if (separate) runCatching { railFocus.requestFocus() } else categoriesOpen = true }
 

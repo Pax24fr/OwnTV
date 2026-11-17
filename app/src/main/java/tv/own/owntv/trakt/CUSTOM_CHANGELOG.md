@@ -3,6 +3,10 @@
 Ce document répertorie l'ensemble des modifications personnalisées apportées au code source d'OwnTV afin d'intégrer et de maintenir la synchronisation avec Trakt.tv. Il sert de guide de référence lors des mises à jour du dépôt original (upstream).
 
 ---
+- Ajout de Trakt (basique via menu marque comme vu + interception fin de visionnage)
+- Onglet Téléchargements : Passage de l'onglet Recordings en premier par défaut.
+- Encodage EPG (Caractères bizarres / ``) : Diagnostic et correction de l'analyseur XML
+- UX Télécommande (Bouton Back pour vider la recherche) : Implémenté sur le Live TV, les Films et les Séries.
 
 ## 📦 Fichiers modifiés et créés
 
