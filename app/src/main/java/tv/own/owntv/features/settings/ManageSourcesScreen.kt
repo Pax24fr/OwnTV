@@ -441,14 +441,14 @@ private fun SourceRow(
     }
     val back = rowFocus ?: remember { FocusRequester() }
     val actions = if (isDeleting) emptyList() else listOf(
-        StageAction(OwnTVIcon.PENCIL, stringResource(R.string.settings_sources_edit), onEdit),
-        // "Info", not "Test": the expensive measurement lives behind Re-test inside the popup.
-        StageAction(OwnTVIcon.INFO, stringResource(R.string.settings_sources_info), onTest),
         StageAction(
             OwnTVIcon.REFRESH,
             stringResource(if (syncState.isActive) R.string.settings_sources_cancel else R.string.settings_sources_resync),
             if (syncState.isActive) onCancelSync else onResync,
         ),
+        StageAction(OwnTVIcon.PENCIL, stringResource(R.string.settings_sources_edit), onEdit),
+        // "Info", not "Test": the expensive measurement lives behind Re-test inside the popup.
+        StageAction(OwnTVIcon.INFO, stringResource(R.string.settings_sources_info), onTest),
         StageAction(OwnTVIcon.SPARKLE, stringResource(R.string.settings_sources_clean_names), onCleanNames),
         StageAction(OwnTVIcon.TRASH, stringResource(R.string.settings_sources_delete), onDelete, danger = true),
     )
