@@ -91,6 +91,14 @@ import tv.own.owntv.core.model.HomeTrendingStyle
 import tv.own.owntv.core.trending.ProviderVariantParser
 import tv.own.owntv.features.shell.components.MediaDetailsScreen
 import tv.own.owntv.features.shell.components.MediaDetailsUi
+import tv.own.owntv.features.shell.components.VodOptionsMenu
+import tv.own.owntv.features.shell.components.VodGroupWatch
+import tv.own.owntv.features.shell.components.VodGroupLibrary
+import tv.own.owntv.features.shell.components.VodGroupDetails
+import tv.own.owntv.core.model.ContentMenu
+import tv.own.owntv.ui.components.MenuAction
+import tv.own.owntv.features.movies.MovieViewModel
+import tv.own.owntv.features.series.SeriesViewModel
 import tv.own.owntv.player.HeroPreviewEngine
 import tv.own.owntv.ui.components.BrandLockup
 import tv.own.owntv.ui.components.InAppToast
@@ -188,6 +196,9 @@ fun HomeScreen(
     var trailerVideoKey by remember { mutableStateOf<String?>(null) }
     var trailerTitle by remember { mutableStateOf<String?>(null) }
     var detailsItem by remember { mutableStateOf<TrendingHomeItem?>(null) }
+    var contextTrendingItem by remember { mutableStateOf<TrendingHomeItem?>(null) }
+    val movieVm = org.koin.androidx.compose.koinViewModel<MovieViewModel>()
+    val seriesVm = org.koin.androidx.compose.koinViewModel<SeriesViewModel>()
     var detailsMetadata by remember { mutableStateOf<MetadataCacheEntity?>(null) }
     var detailsTmdbWins by remember { mutableStateOf(false) }
     // Focus is on the hero (its buttons or pager): the list must not scroll, and the hero stays unfolded.
@@ -447,6 +458,8 @@ fun HomeScreen(
                                             vm.refresh()
                                         }
                                     },
+                                    onLongClick = { item -> contextTrendingItem = item },
+                                    onMenuKey = { item -> contextTrendingItem = item },
                                     onFocus = onNonHeroFocused,
                                     firstItemFocusRequester = firstItemFocusRequester ?: trendingPrimaryFocus,
                                     track = track,
@@ -1307,6 +1320,8 @@ private fun TrendingPosterRow(
     items: List<TrendingHomeItem>,
     start: Dp,
     onItemClick: (TrendingHomeItem) -> Unit,
+    onLongClick: (TrendingHomeItem) -> Unit,
+    onMenuKey: (TrendingHomeItem) -> Unit,
     onFocus: () -> Unit,
     firstItemFocusRequester: FocusRequester?,
     track: (FocusRequester) -> Unit,
@@ -1329,12 +1344,19 @@ private fun TrendingPosterRow(
                         is TrendingHomeItem.Series -> item.series.name
                     },
                     onClick = { onItemClick(item) },
+                    onLongClick = { onLongClick(item) },
                     width = 196.mpx,
                     height = 294.mpx,
                     rating = item.snapshot.rating?.let(::ratingText),
                     modifier = Modifier
                         .then(if (index == 0 && firstItemFocusRequester != null) Modifier.focusRequester(firstItemFocusRequester) else Modifier)
                         .tracked(track = track)
+                        .onPreviewKeyEvent { e ->
+                            if (e.type == KeyEventType.KeyDown && e.key == Key.Menu) {
+                                onMenuKey(item)
+                                true
+                            } else false
+                        }
                         .onFocusChanged {
                             if (it.hasFocus) {
                                 onItemFocused(index)
