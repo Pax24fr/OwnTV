@@ -1490,3 +1490,4 @@
 2	json	app/src/main/java/tv/own/owntv/trakt/TraktManager.kt	access_token
 1	preference-key	app/src/main/java/tv/own/owntv/trakt/TraktManager.kt	trakt_prefs
 1	technical	app/src/main/java/tv/own/owntv/features/settings/TraktAccountScreen.kt	1
+1	technical	app/src/main/java/tv/own/owntv/features/settings/PlayerButtonsSettingsScreen.kt	pb_dpad_up_down
