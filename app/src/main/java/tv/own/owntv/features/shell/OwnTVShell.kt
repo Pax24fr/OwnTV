@@ -2085,7 +2085,12 @@ fun OwnTVShell(
                     onCyclePosition = { scope.launch { settingsRepo.setMiniPlayerPosition(miniPos.next().name) } },
                     onAudioMode = toAudioMode,
                     entryFocusRequester = miniEntryFocus,
-                    onBack = { runCatching { shellContentFocus.requestFocus() } },
+                    onBack = {
+                        val restored = guideEntry?.invoke() == true
+                        if (!restored) {
+                            runCatching { contentAreaFocus.requestFocus() }
+                        }
+                    },
                     modifier = Modifier.fillMaxSize().onFocusChanged { miniHasFocus = it.hasFocus },
                 )
             }
