@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -250,6 +251,9 @@ fun OwnTVShell(
         }
     }
     val mpvEngine = remember(player) { tv.own.owntv.player.MpvPlaybackEngine(player) }
+    val addedLabel = stringResource(R.string.settings_favorite_added)
+    val removedLabel = stringResource(R.string.settings_favorite_removed)
+    val toastTemplate = stringResource(R.string.settings_favorite_toast_message)
     // Audio focus + MediaSession. This is the only place that knows which engine currently owns
     // the speaker, so it hands that engine over and takes it back when the player closes.
     val playbackSession = koinInject<tv.own.owntv.player.PlaybackSession>()
@@ -865,6 +869,69 @@ fun OwnTVShell(
             RemoteShortcutAction.OPEN_ASPECT_CONTROLS,
             RemoteShortcutAction.TOGGLE_PLAYBACK_INFO,
             -> Unit
+            RemoteShortcutAction.TOGGLE_FAVORITE -> {
+                val actionText = { added: Boolean -> if (added) addedLabel else removedLabel }
+                if (playerMode != PlayerMode.NONE) {
+                    when (zapSource) {
+                        MainSection.LIVE_TV -> previewChannel?.let { ch ->
+                            val isFav = liveFavoriteIds.contains(ch.id)
+                            liveVm.toggleFavorite(ch)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), ch.name))
+                        }
+                        MainSection.MOVIES -> playingMovie?.let { m ->
+                            val isFav = movieFavoriteIds.contains(m.id)
+                            movieVm.toggleFavorite(m)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), m.name))
+                        }
+                        MainSection.SERIES -> playingSeries?.let { s ->
+                            val isFav = seriesFavoriteIds.contains(s.id)
+                            seriesVm.toggleFavorite(s)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), s.name))
+                        }
+                        else -> {}
+                    }
+                } else {
+                    when (selectedSection) {
+                        MainSection.HOME -> homeVm.uiState.value.let { state ->
+                            state.trendingItems.getOrNull(state.activeTrendingIndex)?.let { item ->
+                                val title = when (item) {
+                                    is tv.own.owntv.core.home.TrendingHomeItem.Movie -> item.movie.name
+                                    is tv.own.owntv.core.home.TrendingHomeItem.Series -> item.series.name
+                                }
+                                val isFav = when (item) {
+                                    is tv.own.owntv.core.home.TrendingHomeItem.Movie -> movieFavoriteIds.contains(item.movie.id)
+                                    is tv.own.owntv.core.home.TrendingHomeItem.Series -> seriesFavoriteIds.contains(item.series.id)
+                                }
+                                homeVm.toggleTrendingFavorite(item)
+                                val added = !isFav
+                                localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), title))
+                            }
+                        }
+                        MainSection.LIVE_TV, MainSection.EPG -> previewChannel?.let { ch ->
+                            val isFav = liveFavoriteIds.contains(ch.id)
+                            liveVm.toggleFavorite(ch)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), ch.name))
+                        }
+                        MainSection.MOVIES -> movieVm.selectedMovie.value?.let { m ->
+                            val isFav = movieFavoriteIds.contains(m.id)
+                            movieVm.toggleFavorite(m)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), m.name))
+                        }
+                        MainSection.SERIES -> seriesVm.selectedSeries.value?.let { s ->
+                            val isFav = seriesFavoriteIds.contains(s.id)
+                            seriesVm.toggleFavorite(s)
+                            val added = !isFav
+                            localSubToast.show(java.lang.String.format(toastTemplate, actionText(added), s.name))
+                        }
+                        else -> {}
+                    }
+                }
+            }
         }
     }
     val latestRemoteShortcutDispatch by rememberUpdatedState(dispatchRemoteShortcut)
@@ -1371,11 +1438,13 @@ fun OwnTVShell(
                             onPlayCatchup = guidePlayCatchup,
                             onAddEpg = { openEpgAdd = true; onSelectSection(MainSection.SETTINGS) },
                             previewEnabled = playerMode == PlayerMode.NONE,
+                            isMiniPlayer = playerMode == PlayerMode.MINI,
                             liveMode = true,
                             onEntryHook = { guideEntry = it },
                             onListView = { liveVm.setLiveView(tv.own.owntv.core.settings.SettingsRepository.LiveView.LIST) },
                             restoreFocus = restoreFocus,
                             onRestored = { restoreFocus = false },
+                            onFocusMiniPlayer = { if (playerMode == PlayerMode.MINI) runCatching { miniEntryFocus.requestFocus() } },
                             modifier = Modifier
                                 .fillMaxSize()
                                 .onFocusChanged { if (it.hasFocus) focusedLayer = ShellLayer.CONTENT }
@@ -1387,8 +1456,10 @@ fun OwnTVShell(
                             onOpenGuide = { liveVm.setLiveView(tv.own.owntv.core.settings.SettingsRepository.LiveView.GUIDE) },
                             onChildFocused = { focusedLayer = ShellLayer.CONTENT },
                             previewEnabled = playerMode == PlayerMode.NONE,
+                            isMiniPlayer = playerMode == PlayerMode.MINI,
                             restoreFocus = restoreFocus,
                             onRestored = { restoreFocus = false },
+                            onFocusMiniPlayer = { if (playerMode == PlayerMode.MINI) runCatching { miniEntryFocus.requestFocus() } },
                             modifier = Modifier.fillMaxSize(),
                         )
 
@@ -1436,10 +1507,12 @@ fun OwnTVShell(
                             onPlayChannel = guidePlayChannel,
                             onPlayCatchup = guidePlayCatchup,
                             previewEnabled = playerMode == PlayerMode.NONE,
+                            isMiniPlayer = playerMode == PlayerMode.MINI,
                             onEntryHook = { guideEntry = it },
                             onAddEpg = { openEpgAdd = true; onSelectSection(MainSection.SETTINGS) },
                             restoreFocus = restoreFocus,
                             onRestored = { restoreFocus = false },
+                            onFocusMiniPlayer = { if (playerMode == PlayerMode.MINI) runCatching { miniEntryFocus.requestFocus() } },
                             modifier = Modifier
                                 .fillMaxSize()
                                 .onFocusChanged { if (it.hasFocus) focusedLayer = ShellLayer.CONTENT }
@@ -1896,7 +1969,7 @@ fun OwnTVShell(
                         onDismiss = { showLocalSubPicker = false },
                     )
                 }
-                tv.own.owntv.ui.components.InAppToast(localSubToast)
+
                 // Programme reminders: when one comes up, ask to switch, switch, or only say so (the
                 // Programme reminders setting) — over whatever is on screen, the player included.
                 val reminderManager = koinInject<tv.own.owntv.core.reminder.ReminderManager>()
@@ -2078,6 +2151,7 @@ fun OwnTVShell(
         }
     }
     tv.own.owntv.ui.components.InAppToast(epgMatchToast)
+    tv.own.owntv.ui.components.InAppToast(localSubToast)
 
     // Automatic update check (GitHub Releases) shortly after launch, once per session: a small
         // top-right status card shows "Checking… / up to date" (auto-hides) or stays with

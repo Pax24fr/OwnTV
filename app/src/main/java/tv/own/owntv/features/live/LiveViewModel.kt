@@ -672,6 +672,7 @@ class LiveViewModel(
                             ?.let(categoriesById::get)
                             ?.sourceId
                             ?.let(multiSourceNames::get),
+                        sourceId = e.categoryId?.let(categoriesById::get)?.sourceId,
                     )
                 }
             }

@@ -464,6 +464,7 @@ fun PlayerHud(
             RemoteShortcutAction.OPEN_AUDIO_CONTROLS -> { controlsVisible = true; dialog = HudDialog.AUDIO }
             RemoteShortcutAction.OPEN_ASPECT_CONTROLS -> { controlsVisible = true; dialog = HudDialog.ZOOM }
             RemoteShortcutAction.TOGGLE_PLAYBACK_INFO -> showInfo = !showInfo
+            RemoteShortcutAction.TOGGLE_FAVORITE -> onToggleFavorite?.invoke()
             else -> remoteShortcuts.dispatch(action)
         }
     }

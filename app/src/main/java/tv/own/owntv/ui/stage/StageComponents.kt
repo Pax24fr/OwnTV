@@ -797,6 +797,8 @@ fun StagePoster(
     progress: Float? = null,
     /** A finished title: the `.ep` ✓ badge in the top corner instead of a bar. */
     watched: Boolean = false,
+    /** The playlist mark for grid items. */
+    mark: PlaylistMark? = null,
     artwork: @Composable BoxScope.() -> Unit,
 ) {
     val interaction = remember { MutableInteractionSource() }
@@ -844,13 +846,23 @@ fun StagePoster(
             }
         }
         Spacer(Modifier.height(12.mpx))
-        Text(
-            title,
-            style = if (line != null) stageText(18, 700) else stageText(if (compact) 15.5f else 17f, if (focused) 700 else 600),
-            color = if (focused || line != null) stageTone(Color.White, StageColors.Text) else StageColors.Muted,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.mpx),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            mark?.let { m ->
+                Box(Modifier.size(7.mpx).background(m.shownColor, CircleShape))
+            }
+            Text(
+                title,
+                style = if (line != null) stageText(18, 700) else stageText(if (compact) 15.5f else 17f, if (focused) 700 else 600),
+                color = if (focused || line != null) stageTone(Color.White, StageColors.Text) else StageColors.Muted,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
+            )
+        }
         if (line != null) Text(line, style = stageText(15, 400), color = StageColors.Muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }

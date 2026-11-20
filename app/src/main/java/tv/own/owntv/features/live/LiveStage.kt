@@ -397,7 +397,11 @@ internal data class LiveCategoryEntry(
  * Guide's category sheet is this same list.
  */
 @Composable
-internal fun liveCategoryEntries(railItems: List<LiveRailItem>, railCounts: Map<tv.own.owntv.core.live.LiveKey, Int>): Pair<List<LiveCategoryEntry>, String> {
+internal fun liveCategoryEntries(
+    railItems: List<LiveRailItem>,
+    railCounts: Map<tv.own.owntv.core.live.LiveKey, Int>,
+    marks: Map<Long, PlaylistMark> = emptyMap(),
+): Pair<List<LiveCategoryEntry>, String> {
     val recentLabel = stringResource(R.string.content_category_recently_watched)
     val entries = railItems.map { item ->
         val label = if (item.key == tv.own.owntv.core.live.LiveKey.History) recentLabel else item.displayLabel()
@@ -414,7 +418,7 @@ internal fun liveCategoryEntries(railItems: List<LiveRailItem>, railCounts: Map<
                 else -> if (item.locked) OwnTVIcon.LOCK else null
             },
             count = if (item.sealed) null else railCounts[item.key],
-            mark = null,
+            mark = item.sourceId?.let(marks::get),
         )
     }
     val groupCountry = ProviderTags.sharedCountry(entries.mapNotNull { it.name })
@@ -644,7 +648,7 @@ private fun LiveColumnItem(
                 if (tags.isNotEmpty()) Row(horizontalArrangement = Arrangement.spacedBy(6.mpx)) { tags.forEach { StageTag(it, onAccent = on) } }
             }
             entry.count?.let { Text(tv.own.owntv.ui.components.formatCount(it), style = stageText(15, 700), color = on ?: StageColors.Dim, maxLines = 1, overflow = TextOverflow.Ellipsis) }
-            entry.mark?.let { m -> Box(Modifier.size(7.mpx).background(m.shownColor, RoundedCornerShape(50))) }
+            entry.mark?.let { m -> StagePlaylistMark(m) }
         }
     }
 }

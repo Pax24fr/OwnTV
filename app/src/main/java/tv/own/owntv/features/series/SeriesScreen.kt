@@ -700,6 +700,7 @@ private fun SeriesGrid(
                                         rating = show.rating?.takeIf { it > 0 }?.let(::vodRating),
                                         width = 196.mpx, height = 294.mpx,
                                         progress = seriesProgress[show.id],
+                                        mark = playlistMarks[show.sourceId],
                                         onClick = { onOpenAt(index); vm.openSeries(show) },
                                         onLongClick = { openMenu(show, index) },
                                         modifier = Modifier
@@ -865,6 +866,7 @@ private fun SeriesGrid(
                                     width = posterW, height = posterW * 1.5f,
                                     compact = true,
                                     progress = seriesProgress[show.id],
+                                    mark = playlistMarks[show.sourceId],
                                     onClick = { onOpenAt(index); vm.openSeries(show) },
                                     onLongClick = { openMenu(show, index) },
                                     modifier = Modifier

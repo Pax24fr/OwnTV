@@ -80,7 +80,7 @@ fun ChannelBrowserOverlay(
     showNumbers: Boolean = true,
 ) {
     val layoutDirection = LocalLayoutDirection.current
-    val (entries, groupsHeading) = liveCategoryEntries(railItems, railCounts)
+    val (entries, groupsHeading) = liveCategoryEntries(railItems, railCounts, playlistMarks)
     val selectedIndex = remember(entries, shownKey) { entries.indexOfFirst { it.item.key == shownKey }.coerceAtLeast(0) }
     val categoryListState = rememberLazyListState()
     val categoryFocus = remember { FocusRequester() }

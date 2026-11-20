@@ -95,6 +95,7 @@ internal fun remoteActionLabel(action: RemoteShortcutAction): String = stringRes
         RemoteShortcutAction.OPEN_AUDIO_CONTROLS -> R.string.player_tool_audio
         RemoteShortcutAction.OPEN_ASPECT_CONTROLS -> R.string.player_tool_aspect
         RemoteShortcutAction.TOGGLE_PLAYBACK_INFO -> R.string.player_tool_info
+        RemoteShortcutAction.TOGGLE_FAVORITE -> R.string.settings_remote_action_toggle_favorite
     },
 )
 
@@ -119,5 +120,6 @@ internal fun remoteActionIcon(action: RemoteShortcutAction): OwnTVIcon = when (a
     RemoteShortcutAction.OPEN_SUBTITLE_CONTROLS -> OwnTVIcon.SUBTITLE
     RemoteShortcutAction.OPEN_ASPECT_CONTROLS -> OwnTVIcon.ASPECT
     RemoteShortcutAction.TOGGLE_PLAYBACK_INFO -> OwnTVIcon.INFO
+    RemoteShortcutAction.TOGGLE_FAVORITE -> OwnTVIcon.FAVORITE
     RemoteShortcutAction.PREVIOUS_CHANNEL -> OwnTVIcon.HISTORY
 }
