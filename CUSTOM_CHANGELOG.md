@@ -20,3 +20,7 @@ Il sert de guide de référence lors des mises à jour du dépôt original (upst
 * **Indicateurs de playlist unifiés (Logos de catégories & Points de grille VOD) :** 
   * Uniformisation de l'affichage des badges de playlist (`StagePlaylistMark`) sur toutes les catégories (Live TV, Movies, Series) en mode feuille (`sheet`) et colonne (`column`).
   * Ajout d'un indicateur visuel (point coloré aux couleurs de la playlist) en tête de titre sous les affiches en mode grille VOD (Films et Séries) pour identifier instantanément la playlist d'origine de chaque titre.
+
+* **Focus Mini-player depuis le Guide TV :** Un premier appui `OK` sur une autre chaîne change la lecture dans le mini-player. Un second appui sur `OK` bascule immédiatement le focus sur les contrôles du mini-player (pour l'agrandir en plein écran ou le fermer). L'appui sur `BACK` depuis le mini-player remet le focus sur la ligne du guide.
+
+
