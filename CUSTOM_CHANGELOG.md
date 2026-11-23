@@ -21,7 +21,10 @@ Il sert de guide de référence lors des mises à jour du dépôt original (upst
 
 * **Onglet Téléchargements :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
 
-* **Raccourci télécommande "Toggle favorite" :** Ajout d'une action configurable `TOGGLE_FAVORITE` dans *Settings › Layout › Remote shortcuts*. Permet d'assigner une touche pour basculer instantanément le statut de favori du contenu actif (chaîne Live, film, série, ou élément *Now Trending*). Une notification apparaît brièvement en bas de l'écran avec le texte de confirmation (Ajouté/Retiré + [Nom]).
+* **Raccourcis télécommande "Toggle favorite" & "Record or download" (`TOGGLE_FAVORITE` & `INSTANT_RECORD_DOWNLOAD`) :** 
+  * Ajout d'actions configurables dans *Settings › Layout › Remote shortcuts*.
+  * **Toggle favorite** : Permet d'assigner une touche pour basculer instantanément le statut de favori du contenu actif (chaîne Live, film, série, ou élément *Now Trending*). Une notification apparaît brièvement en bas de l'écran avec le texte de confirmation (Ajouté/Retiré + [Nom]).
+  * **Record or download** : Permet d'assigner une touche dédiée (ex: la touche *RECORD*) pour démarrer ou stopper instantanément l'enregistrement d'une chaîne Live (avec vérification du budget de connexions et affichage du motif de refus en cas de dépassement), ou lancer le téléchargement d'un film ou d'une série en VOD.
 
 * **Indicateurs de playlist unifiés (Logos de catégories & Points de grille VOD) :** 
   * Uniformisation de l'affichage des badges de playlist (`StagePlaylistMark`) sur toutes les catégories (Live TV, Movies, Series) en mode feuille (`sheet`) et colonne (`column`).
