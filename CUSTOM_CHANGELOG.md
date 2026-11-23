@@ -17,10 +17,6 @@ Il sert de guide de référence lors des mises à jour du dépôt original (upst
 
 * **Menu rapide sur les affiches *Now Trending* (Accueil) :** Ajout d'un menu contextuel rapide avec les actions : *Détails*, *Bande-annonce*, *Favoris* et *Télécharger* sur les affiches du mode *Posters only* de la section *Now Trending* sur l'écran d'accueil (`HomeScreen.kt`).
 
-* **Ordre des actions du menu Playlist :** Réorganisation du sous-menu d'une playlist dans *Settings › Playlists* pour placer **Re-sync** en premier lien (action la plus fréquente).
-
-* **Onglet Téléchargements :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
-
 * **Raccourcis télécommande "Toggle favorite" & "Record or download" (`TOGGLE_FAVORITE` & `INSTANT_RECORD_DOWNLOAD`) :** 
   * Ajout d'actions configurables dans *Settings › Layout › Remote shortcuts*.
   * **Toggle favorite** : Permet d'assigner une touche pour basculer instantanément le statut de favori du contenu actif (chaîne Live, film, série, ou élément *Now Trending*). Une notification apparaît brièvement en bas de l'écran avec le texte de confirmation (Ajouté/Retiré + [Nom]).
@@ -31,6 +27,10 @@ Il sert de guide de référence lors des mises à jour du dépôt original (upst
   * Ajout d'un indicateur visuel (point coloré aux couleurs de la playlist) en tête de titre sous les affiches en mode grille VOD (Films et Séries) pour identifier instantanément la playlist d'origine de chaque titre.
 
 * **Focus Mini-player depuis le Guide TV :** Un premier appui `OK` sur une autre chaîne change la lecture dans le mini-player. Un second appui sur `OK` bascule immédiatement le focus sur les contrôles du mini-player (pour l'agrandir en plein écran ou le fermer). L'appui sur `BACK` depuis le mini-player remet le focus sur la ligne du guide.
+
+* **Ordre des actions du menu Playlist :** Réorganisation du sous-menu d'une playlist dans *Settings › Playlists* pour placer **Re-sync** en premier lien (action la plus fréquente).
+
+* **Onglet Téléchargements :** Passage de l'onglet *Recordings* en premier dans `DownloadsScreen.kt`.
 
 * **Encodage EPG :** Correction dans le module Core (`XmltvParser.kt` via `BufferedInputStream`) pour forcer la lecture UTF-8 des guides XMLTV.
 
